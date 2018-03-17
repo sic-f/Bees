@@ -36,6 +36,9 @@ defmodule Bees.Venue do
     end
   end
 
+  @spec explore(Bees.Client.t, String.t, String.t, String.t, String.t, String.t, String.t, String.t)
+  :: {atom, [map,...]}
+
   def explore(client, latitude, longitude, limit \\ 50, section \\ "topPicks", open_now \\ 0, venue_photos \\ 0, radius \\ 800) do
     params = [
       ll: "#{latitude},#{longitude}",
@@ -51,7 +54,7 @@ defmodule Bees.Venue do
       {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
         response = decode_many(body)
         {:ok,  response["response"]["groups"]}
-      {:error, error} ->
+      {:ok,  %HTTPoison.Response{body: error}} ->
         {:error, error}
     end
   end
